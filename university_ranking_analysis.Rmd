@@ -1,0 +1,104 @@
+---
+title: "university_ranking_analysis"
+author: "Oleh Zemlianyi"
+date: "2025-05-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+## University Rankings Data Analysis
+### Oleh Zemlianyi
+
+#### Load libraries
+```{r}
+library(tidyverse)
+library(GGally)
+```
+
+#### Load dataset
+```{r}
+data <- read.csv("timesData.csv")
+data$total_score <- as.numeric(data$total_score)
+```
+
+#### Top Countries by Number of Universities 
+```{r}
+top_countries <- data %>%
+  group_by(country) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  head(10)
+
+ggplot(top_countries, aes(x = reorder(country, count), y = count)) +
+  geom_bar(stat = "identity", fill = "#0040FF") +
+  coord_flip() +
+  labs(title = "Top 10 Countries by Number of Ranked Universities",
+       x = "Country", y = "Number of Universities") +
+  theme_minimal()
+
+```
+
+#### Score Distribution
+```{r}
+score_dist_plot <- ggplot(data, aes(x = total_score)) +
+  geom_histogram(fill = "#0040FF", color = "white", bins = 30) +
+  labs(title = "Distribution of Total Scores",
+       x = "Total Score", y = "Number of Universities") +
+  theme_minimal()
+print(score_dist_plot)
+```
+#### Teaching vs Research vs Citations
+
+```{r}
+library(GGally)
+
+data_corr <- data %>%
+  select(teaching, research, citations, total_score) %>%
+  drop_na()
+
+ggpairs(data_corr, title = "Correlation Between Key Metrics")
+
+```
+
+
+#### Citations vs Total Score 
+```{r}
+ggplot(data, aes(x = citations, y = total_score)) +
+  geom_point(color = "#0040FF", alpha = 0.3, size = 1) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linewidth = 1) +
+  labs(title = "Citations vs Total Score",
+       x = "Citations", y = "Total Score") +
+  theme_classic()
+
+```
+
+#### Score Composition Pie Chart
+
+```{r}
+components <- data.frame(
+  category = c("Teaching", "Research", "Citations", "International Outlook", "Industry Income"),
+  weight = c(30, 30, 30, 7.5, 2.5)
+)
+
+components$fraction <- components$weight / sum(components$weight)
+components$percentage <- paste0(components$weight, "%")
+
+ggplot(components, aes(x = "", y = fraction, fill = category)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y", start = 0) +
+  geom_text(aes(label = percentage), 
+            position = position_stack(vjust = 0.5), 
+            color = "white", size = 5, fontface = "bold") +
+  theme_void() +
+  labs(title = "How the Total Score is Calculated") +
+  scale_fill_manual(values = c("#0040FF", "#3399FF", "#66CCFF", "#99CCFF", "#CCCCFF"))
+
+```
+
