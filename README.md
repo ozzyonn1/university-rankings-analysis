@@ -2,7 +2,7 @@
 
 This is a data analysis project based on the Times Higher Education World University Rankings dataset from Kaggle.
 
-🔍 **What’s inside:**
+## 🔍 **What’s inside:**
 - Dataset overview and structure
 - Visualization of top countries by number of universities
 - Distribution of total scores
@@ -10,12 +10,12 @@ This is a data analysis project based on the Times Higher Education World Univer
 - Pie chart of score composition
 - Key insights and conclusions
 
-🧩 **Tools Used:**
+## 🧩 **Tools Used:**
 - R (tidyverse, ggplot2, GGally)
 - RStudio
 - Canva (presentation design)
 
-📊 **Dataset:**  
+## 📊 **Dataset:**  
 [World University Rankings on Kaggle](https://www.kaggle.com/datasets/mylesoneill/world-university-rankings)
 
-👨‍💻 **Author:** Oleh Zemlianyi  
+## 👨‍💻 **Author:** Oleh Zemlianyi  
